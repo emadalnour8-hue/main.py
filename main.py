@@ -4,8 +4,8 @@ from fastapi import FastAPI, Request
 from telegram import Update
 from telegram.ext import Application, CommandHandler
 
-# بياناتك الجاهزة
-BOT_TOKEN = "8355891654:AAE7Yncq6CmJYTONlOGQC8DQgxxNSc8i_jg"
+# التوكن الصحيح الذي أرسلته
+BOT_TOKEN = "8355891654:AAE7Yncq6CmJYTONl0GQC8DQgxxnSc8i_jg"
 OWNER_ID = 8081542687
 
 app = FastAPI()
@@ -14,14 +14,18 @@ tg_app: Optional[Application] = None
 @app.on_event("startup")
 async def startup():
     global tg_app
+    # إعداد البوت باستخدام التوكن المحدث
     tg_app = Application.builder().token(BOT_TOKEN).build()
-    tg_app.add_handler(CommandHandler("start", lambda u, c: u.message.reply_text("✅ البوت الخاص بك يعمل الآن!")))
+    
+    # إضافة أمر ترحيبي للتأكد من استجابة البوت
+    tg_app.add_handler(CommandHandler("start", lambda u, c: u.message.reply_text("✅ أهلاً بك! البوت يعمل الآن بشكل صحيح بنسبة 100%.")))
+    
     await tg_app.initialize()
     await tg_app.start()
 
 @app.get("/")
 async def root():
-    return {"status": "online"}
+    return {"status": "online", "bot": "running"}
 
 @app.post("/webhook")
 async def telegram_webhook(request: Request):
